@@ -1,0 +1,45 @@
+
+   ANDROID SNIPPET: Asking for android permissions
+__________________________________________________________________________________________________
+--------------------------------------------------------------------------------------------------
+
+
+#____ AndroidManifest.xml ____#
+
+<uses-permission android:name="android.permission.PERMISSION_NEEDED_01" />
+<uses-permission android:name="android.permission.PERMISSION_NEEDED_02" />
+<uses-permission android:name="android.permission.PERMISSION_NEEDED_03" />
+
+
+#____ MainActivity.java ____#
+
+private final String[] PERMISSIONS = {
+            Manifest.permission.PERMISSION_NEEDED_01,
+            Manifest.permission.PERMISSION_NEEDED_02,
+            Manifest.permission.PERMISSION_NEEDED_03
+    };
+
+
+/*- PERMISSIONS MANAGEMENT -*/
+public void askForPermissions(Context context, String... permissions) {
+    if (context != null && permissions != null) {
+        int permissionIndex = 0;
+        for (String permission : permissions) {
+            if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{permission}, permissionIndex);
+            }
+            permissionIndex++;
+        }
+    }
+}
+
+@Override
+public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(MainActivity.this, PERMISSIONS[requestCode]) != PackageManager.PERMISSION_GRANTED){
+            askForPermissions(getApplicationContext(), new String[]{PERMISSIONS[requestCode]});
+        } else {
+            Toast.makeText(getApplicationContext(), "Permission "+PERMISSIONS[requestCode]+" granted", Toast.LENGTH_SHORT).show();
+        }
+    }
+}
