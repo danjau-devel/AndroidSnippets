@@ -1,0 +1,92 @@
+
+   PYTHON SNIPPET: TCP and UDP sockets
+__________________________________________________________________________________________________
+--------------------------------------------------------------------------------------------------
+
+
+#____ TcpClient.py ____#
+
+import socket
+
+HOST = "localhost"
+PORT = 1234
+
+try:
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Socket TCP
+    sock.connect((HOST, PORT))
+
+    while True:
+        data, server_addr = sock.recvfrom(1024)
+        if data != b'':
+            print(data, " from ", server_addr)
+
+except Exception:
+    sock.close()
+
+
+
+#____ TcpServer.py ____#
+
+import socket
+
+HOST = "0.0.0.0"
+PORT = 1234
+
+try:
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Socket TCP
+    sock.bind((HOST, PORT))
+    sock.listen()
+    print("Waiting for clients...")
+
+    while True:
+        connection, client_addr = sock.accept()
+        print("Client connected ", client_addr)
+        connection.sendall(b'Hello World')
+
+except Exception:
+    connection.close()
+    sock.close()
+
+
+
+#____ UdpClient.py ____#
+
+import socket
+
+HOST = "localhost"
+PORT = 1234
+
+try:
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Socket UDP
+    sock.connect((HOST, PORT))
+
+    sock.sendall(b'Hello World')
+    sock.close()
+
+except Exception:
+    sock.close()
+
+
+
+#____ UdpServer.py ____#
+
+import socket
+
+HOST = "0.0.0.0"
+PORT = 1234
+
+try:
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Socket UDP
+    sock.bind((HOST, PORT))
+    print("Waiting for clients...")
+
+    while True:
+        data = sock.recv(1024)
+        print(data)
+
+except Exception:
+    sock.close()
