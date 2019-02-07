@@ -1,2 +1,2 @@
-# AndroidSnippets
-Set of snippets for Android development reuse.
+# CodeSnippets
+Set of snippets for development reuse.
