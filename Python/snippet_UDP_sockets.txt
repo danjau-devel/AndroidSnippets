@@ -1,0 +1,45 @@
+
+   PYTHON SNIPPET: UDP sockets
+__________________________________________________________________________________________________
+--------------------------------------------------------------------------------------------------
+
+
+#____ UdpClient.py ____#
+
+import socket
+
+HOST = "localhost"
+PORT = 1234
+
+try:
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Socket UDP
+    sock.connect((HOST, PORT))
+
+    sock.sendall(b'Hello World')
+    sock.close()
+
+except Exception:
+    sock.close()
+
+
+
+#____ UdpServer.py ____#
+
+import socket
+
+HOST = "0.0.0.0"
+PORT = 1234
+
+try:
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Socket UDP
+    sock.bind((HOST, PORT))
+    print("Waiting for clients...")
+
+    while True:
+        data = sock.recv(1024)
+        print(data)
+
+except Exception:
+    sock.close()

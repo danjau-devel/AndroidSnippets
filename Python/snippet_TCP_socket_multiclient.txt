@@ -1,0 +1,44 @@
+   PYTHON SNIPPET: TCP multiclient sockets
+__________________________________________________________________________________________________
+--------------------------------------------------------------------------------------------------
+
+
+#____ TcpClient.py ____#
+
+import socket, threading, time
+
+HOST = "0.0.0.0"
+PORT = 1234
+
+
+def handler(connection):
+    try:
+        msg = "Hello World"
+        print(msg)
+        while True:
+            connection.sendall(msg.encode())
+            time.sleep(1)
+
+    except socket.error as e:
+        connection.close()
+
+
+if __name__ == '__main__':
+
+    try:
+
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Socket TCP
+        sock.bind((HOST, PORT))
+        sock.listen(5)
+        print("Waiting for clients...")
+
+        while True:
+            connection, client_addr = sock.accept()
+            print("Client connected ", client_addr)
+            t = threading.Thread(target=handler, args=(connection,))
+            t.setDaemon(True)
+            t.start()
+
+
+    except Exception:
+        sock.close()
